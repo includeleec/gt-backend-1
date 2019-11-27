@@ -1,4 +1,4 @@
-from .. import db
+from app.main.exts import db
 import datetime
 
 

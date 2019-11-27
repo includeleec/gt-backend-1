@@ -1,7 +1,8 @@
 
-from .. import db, flask_bcrypt
+from app.main.exts import db, flask_bcrypt
 import datetime
 from app.main.model.blacklist import BlacklistToken
+# from app.main.model import Proposal
 from ..config import key
 import jwt
 
@@ -19,6 +20,11 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True)
     nickname = db.Column(db.String(50), unique=True)
     password_hash = db.Column(db.String(100))
+
+    # 注意，backref 不能跟 talename 重名
+    proposals_created = db.relationship('Proposal',
+                                    foreign_keys='Proposal.creator_id',
+                                    backref='creator', lazy='dynamic')
 
     @property
     def password(self):

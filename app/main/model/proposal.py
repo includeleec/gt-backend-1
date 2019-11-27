@@ -1,7 +1,7 @@
-from .. import db
+from app.main.exts import db
 from app.main.model.mixin import BaseModelMixin, TimestampMixin
-
-
+from app.main.model.user import User
+from app.main.model.currency import Currency
 
 class ProposalZone(BaseModelMixin, TimestampMixin, db.Model):
     """
@@ -14,6 +14,9 @@ class ProposalZone(BaseModelMixin, TimestampMixin, db.Model):
     summary = db.Column(db.String(200))
     vote_rule = db.Column(db.Text)
     vote_addr_weight_json = db.Column(db.Text)
+    proposals = db.relationship('Proposal',
+                                        foreign_keys='Proposal.zone_id',
+                                        backref='zone', lazy='dynamic')
 
     def __repr__(self):
         return "<Proposal Zone '{}'>".format(self.name)
@@ -28,10 +31,22 @@ class Proposal(BaseModelMixin, TimestampMixin, db.Model):
 
     zone_id = db.Column(db.Integer, db.ForeignKey('proposal_zone.id'))
     title = db.Column(db.String(200))
+    tag = db.Column(db.String(200))
     amount = db.Column(db.DECIMAL)
+    currency_id = db.Column(db.Integer, db.ForeignKey('currency.id'), nullable=True)
     summary = db.Column(db.String(200))
     detail = db.Column(db.Text)
     status = db.Column(db.Integer)
 
     def __repr__(self):
         return "<Proposal '{}'>".format(self.title)
+
+    def zone(self):
+        return ProposalZone.query.filter(zone=self).first()
+
+    def creator(self):
+        return User.query.filter(creator=self).first()
+
+    def currency_unit(self):
+        return Currency.query.filter(currency_unit=self).first()
+

@@ -2,19 +2,21 @@ from flask import request
 from flask_restplus import Resource
 
 from app.main.util.decorator import admin_token_required, token_required
-from ..util.dto import UserDto
+import app.main.util.dto.user_dto as user_dto
 from ..service.user_service import save_new_user, get_all_users, get_a_user
 
-api = UserDto.api
-_user = UserDto.user
+api = user_dto.api
+_user = user_dto.user
+user_get = user_dto.user_get
 
 
 @api.route('/')
 class UserList(Resource):
     @api.doc('list_of_registered_users')
     # @admin_token_required
-    @token_required
-    @api.marshal_list_with(_user, envelope='data')
+    # @token_required
+    # 记得替换回 _user
+    @api.marshal_list_with(user_get, envelope='data')
     def get(self):
         """List all registered users"""
         return get_all_users()
@@ -33,7 +35,7 @@ class UserList(Resource):
 @api.response(404, 'User not found.')
 class User(Resource):
     @api.doc('get a user')
-    @api.marshal_with(_user)
+    @api.marshal_with(user_get)
     def get(self, public_id):
         """get a user given its identifier"""
         user = get_a_user(public_id)

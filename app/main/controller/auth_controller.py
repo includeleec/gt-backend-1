@@ -3,10 +3,10 @@ from flask_restplus import Resource
 
 from app.main.util.decorator import admin_token_required, token_required
 from app.main.service.auth_helper import Auth
-from ..util.dto import AuthDto
+import app.main.util.dto.auth_dto as auth_dto
 
-api = AuthDto.api
-user_auth = AuthDto.user_auth
+api = auth_dto.api
+user_auth = auth_dto.user_auth
 
 
 @api.route('/login')

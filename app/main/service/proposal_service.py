@@ -1,8 +1,7 @@
 import uuid
 import datetime
 from app.main import db
-from app.main.model.user import User
-from app.main.model.proposal import ProposalZone, Proposal
+from app.main.model import User, ProposalZone, Proposal, Currency
 
 
 # def detect_user_exist(func):
@@ -61,6 +60,8 @@ def save_new_proposal(data):
             summary=data['summary'],
             detail=data['detail'],
             creator_id=data['creator_id'],
+            currency_id=data['currency_id'],
+            tag=data['tag'],
         )
 
         save_changes(new_proposal)
@@ -70,9 +71,10 @@ def save_new_proposal(data):
         }
         return response_object, 201
     except Exception as e:
+        print(e)
         response_object = {
             'status': 'fail',
-            'message': 'some error'
+            'message': str(e)
         }
         return response_object, 401
 
@@ -93,3 +95,5 @@ def save_changes(data):
     db.session.add(data)
     db.session.commit()
 
+def get_all_currency():
+    return Currency.query.all()
