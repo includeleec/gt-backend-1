@@ -8,6 +8,7 @@ from ..service.user_service import save_new_user, get_all_users, get_a_user
 api = user_dto.api
 _user = user_dto.user
 user_get = user_dto.user_get
+user_get_all = user_dto.user_get_all
 
 
 @api.route('/')
@@ -16,7 +17,7 @@ class UserList(Resource):
     # @admin_token_required
     # @token_required
     # 记得替换回 _user
-    @api.marshal_list_with(user_get, envelope='data')
+    @api.marshal_list_with(user_get_all, envelope='data')
     def get(self):
         """List all registered users"""
         return get_all_users()
