@@ -32,6 +32,10 @@ def get_all_users():
 def get_a_user(public_id):
     return User.query.filter_by(public_id=public_id).first()
 
+def get_a_user_by_auth_token(auth_token):
+    resp = User.decode_auth_token(auth_token)
+    if not isinstance(resp, str):
+        return User.query.filter_by(id=resp).first()
 
 def generate_token(user):
     try:
