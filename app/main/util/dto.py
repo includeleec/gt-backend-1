@@ -35,6 +35,7 @@ class ProposalZoneDto:
 
 class ProposalDto:
     api = Namespace('proposal', description='proposal related operations')
+
     proposal = api.model('proposal', {
         'id': fields.String(description='proposal id'),
         'title': fields.String(required=True, description='proposal title'),
@@ -45,4 +46,13 @@ class ProposalDto:
         'creator_id': fields.String(description='creator user.id'),
         'created': fields.DateTime(description='created timestamp'),
         'updated': fields.DateTime(description='created timestamp'),
+    })
+
+    proposal_post = api.model('proposal', {
+        'zone_id': fields.String(required=True, description='proposal zone id'),
+        'title': fields.String(required=True, description='proposal title'),
+        'summary': fields.String(description='summary'),
+        'detail': fields.String(description='detail'),
+        'amount': fields.String(description='proposal amount'),
+        'status': fields.String(description='proposal status'),
     })

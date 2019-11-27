@@ -45,23 +45,36 @@ def save_new_proposal_zone(data):
 # @detect_user_exist
 def save_new_proposal(data):
 
-    new_proposal = Proposal(
-        zone_id=data['zone_id'],
-        title=data['title'],
-        amount=data['amount'],
-        summary=data['summary'],
-        detail=data['detail'],
-        vote_rule=data['vote_rule'],
-        vote_addr_weight_json=data['vote_addr_weight_json'],
-        creator_id=data['creator_id'],
-    )
+    proposal_zone = ProposalZone.query.filter_by(id=data['zone_id']).first()
+    if not proposal_zone:
+        response_object = {
+            'status': 'fail',
+            'message': 'relate zone_id is not exists.',
+        }
+        return response_object, 404
 
-    save_changes(new_proposal)
-    response_object = {
-        'status': 'success',
-        'message': 'Successfully create a new proposal.',
-    }
-    return response_object, 201
+    try:
+        new_proposal = Proposal(
+            zone_id=data['zone_id'],
+            title=data['title'],
+            amount=data['amount'],
+            summary=data['summary'],
+            detail=data['detail'],
+            creator_id=data['creator_id'],
+        )
+
+        save_changes(new_proposal)
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully create a new proposal.',
+        }
+        return response_object, 201
+    except Exception as e:
+        response_object = {
+            'status': 'fail',
+            'message': 'some error'
+        }
+        return response_object, 401
 
 
 def get_all_proposal_zone():
