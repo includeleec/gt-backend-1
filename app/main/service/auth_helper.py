@@ -66,7 +66,7 @@ class Auth:
                 response_object = {
                     'status': 'success',
                     'data': {
-                        'user_id': user.id,
+                        'id': user.id,
                         'username': user.username,
                         # 'nickname': user.nickname,
                         'email': user.email,
