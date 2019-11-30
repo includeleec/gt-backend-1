@@ -38,6 +38,11 @@ class Proposal(BaseModelMixin, TimestampMixin, db.Model):
     detail = db.Column(db.Text)
     status = db.Column(db.Integer)
 
+    # 注意，backref 不能跟 talename 重名
+    comments = db.relationship('Comment',
+                                    foreign_keys='Comment.proposal_id',
+                                    backref='link_proposal', lazy='dynamic')
+
     def __repr__(self):
         return "<Proposal '{}'>".format(self.title)
 

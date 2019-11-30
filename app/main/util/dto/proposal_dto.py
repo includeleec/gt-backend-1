@@ -2,11 +2,11 @@ from flask_restplus import Namespace, fields
 import app.main.util.dto.currency_dto as currency_dto
 import app.main.util.dto.proposal_zone_dto as proposal_zone_dto
 import app.main.util.dto.user_dto as user_dto
+from app.main.util.dto.comment_dto import comment_get_list
 
 api = Namespace('proposal', description='proposal related operations')
 
-# 先在外面调用函数，防止在下面的函数中嵌套，造成循环 import 错误
-
+# 用户创建的 proposal
 proposal_created_item = api.model('proposal', {
     'id': fields.String(description='proposal id'),
     'title': fields.String(required=True, description='proposal title'),
@@ -48,6 +48,7 @@ proposal = api.model('proposal', {
     'zone': fields.Nested(proposal_zone_dto.proposal_zone),
     'creator': creator_fields,
     'currency_unit': fields.Nested(currency_dto.currency),
+    'comments': fields.List(fields.Nested(comment_get_list)),
 })
 
 proposal_post = api.model('proposal', {

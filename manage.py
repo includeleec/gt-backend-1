@@ -6,7 +6,9 @@ from flask_script import Manager
 
 from app import blueprint
 from app.main import create_app, db
-from app.main.model import user, blacklist, proposal
+
+# 新添加的 model, 需要在此引入, 这样 flask db migrate 才能识别到
+from app.main.model import user, blacklist, proposal, comment
 
 app = create_app(os.getenv('GT_BACKEND_ENV') or 'dev')
 app.register_blueprint(blueprint)

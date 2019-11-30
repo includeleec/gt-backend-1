@@ -26,6 +26,10 @@ class User(db.Model):
                                     foreign_keys='Proposal.creator_id',
                                     backref='creator', lazy='dynamic')
 
+    comment_created = db.relationship('Comment',
+                                    foreign_keys='Comment.creator_id',
+                                    backref='creator', lazy='dynamic')
+
     @property
     def password(self):
         raise AttributeError('password: write-only field')

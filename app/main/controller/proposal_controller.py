@@ -28,8 +28,6 @@ class ProposalZoneAPI(Resource):
         # get auth token
         auth_token = request.headers.get('Authorization')
         user = get_a_user_by_auth_token(auth_token)
-
-        print(user)
         
         if user:
             post_data['creator_id']=user.id
@@ -84,6 +82,7 @@ class ProposalSingleAPI(Resource):
         """get a proposal given its id"""
         proposal = get_a_proposal(id)
         if not proposal:
+            # print('404')
             api_proposal.abort(404)
         else:
             return proposal
