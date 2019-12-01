@@ -7,6 +7,7 @@ from ..config import key
 import jwt
 
 
+
 class User(db.Model):
     """ User Model for storing user related details """
     __tablename__ = "user"

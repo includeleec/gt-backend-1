@@ -2,6 +2,7 @@ from app.main.exts import db
 from app.main.model.mixin import BaseModelMixin, TimestampMixin
 from app.main.model.user import User
 from app.main.model.currency import Currency
+from app.main.model.comment import Comment
 
 class ProposalZone(BaseModelMixin, TimestampMixin, db.Model):
     """

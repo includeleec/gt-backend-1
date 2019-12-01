@@ -3,9 +3,15 @@ from flask_restplus import Resource
 
 from app.main.util.decorator import admin_token_required, token_required
 from app.main.service.proposal_service import save_new_proposal_zone, get_all_proposal_zone, save_new_proposal, get_all_proposal, get_a_proposal, get_a_proposal_zone, get_all_currency
+from app.main.service.comment_service import get_proposal_comments
+
 import app.main.util.dto.proposal_dto as proposal_dto
 import app.main.util.dto.proposal_zone_dto as proposal_zone_dto
 import app.main.util.dto.currency_dto as currency_dto
+from app.main.util.dto import comment_dto
+
+
+
 
 from ..service.user_service import get_a_user_by_auth_token
 
@@ -86,6 +92,30 @@ class ProposalSingleAPI(Resource):
             api_proposal.abort(404)
         else:
             return proposal
+
+# proposal comment api
+
+api_comment = comment_dto.api
+comment_get_list = comment_dto.comment_get_list
+
+@api_proposal.route('/comment/<id>')
+@api_proposal.param('id', 'Proposal id')
+@api_proposal.response(404, 'Proposal not found.')
+class CommentAPI(Resource):
+    """
+        Proposal Comment Resource
+    """
+    @api_proposal.doc('get proposal comment')
+    @api_proposal.marshal_with(comment_get_list, envelope='data')
+    def get(self, id):
+        """get a proposal given its id"""
+        proposal = get_a_proposal(id)
+        if not proposal:
+            # print('404')
+            api_proposal.abort(404)
+        else:
+            comments = get_proposal_comments(id)
+            return comments
 
 
 # currency dto

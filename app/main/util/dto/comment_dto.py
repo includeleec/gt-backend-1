@@ -13,6 +13,15 @@ _user_get = api.model('user', {
 
 _creator_fields = fields.Nested(_user_get)
 
+_comment_reply = api.model('comment', {
+    'id': fields.String(description='proposal comment id'),
+    'text': fields.String(description='text'),
+    'created': fields.DateTime(description='created timestamp'),
+    'updated': fields.DateTime(description='updated timestamp'),
+    'creator': _creator_fields,
+})
+
+
 # 获取 proposal detail 时,展示 comment list
 comment_get_list = api.model('comment', {
     'id': fields.String(description='proposal comment id'),
@@ -21,6 +30,7 @@ comment_get_list = api.model('comment', {
     'created': fields.DateTime(description='created timestamp'),
     'updated': fields.DateTime(description='updated timestamp'),
     'creator': _creator_fields,
+    'replies': fields.List(fields.Nested(_comment_reply))
 })
 
 # post/put a new post

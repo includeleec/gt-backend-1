@@ -48,7 +48,7 @@ proposal = api.model('proposal', {
     'zone': fields.Nested(proposal_zone_dto.proposal_zone),
     'creator': creator_fields,
     'currency_unit': fields.Nested(currency_dto.currency),
-    'comments': fields.List(fields.Nested(comment_get_list)),
+    # 'comments': fields.List(fields.Nested(comment_get_list)),
 })
 
 proposal_post = api.model('proposal', {
