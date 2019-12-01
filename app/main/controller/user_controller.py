@@ -3,13 +3,18 @@ from flask_restplus import Resource
 
 from app.main.util.decorator import admin_token_required, token_required
 import app.main.util.dto.user_dto as user_dto
-from ..service.user_service import save_new_user, get_all_users, get_a_user
+from app.main.service import user_service
 
 api = user_dto.api
 _user = user_dto.user
 user_get = user_dto.user_get
 user_get_all = user_dto.user_get_all
 
+save_new_user = user_service.save_new_user
+get_all_users =user_service.get_all_users
+get_a_user =user_service.get_a_user
+get_a_user_by_auth_token =user_service.get_a_user_by_auth_token
+update_user_avatar = user_service.update_user_avatar
 
 @api.route('/')
 class UserList(Resource):
@@ -43,7 +48,22 @@ class User(Resource):
         if not user:
             api.abort(404)
         else:
+           
             return user
 
+@api.route('/avatar')
+@api.response(404, 'User not found.')
+class UserAvatar(Resource):
+    @api.doc('update user avatar')
+    @token_required
+    def post(self):
+        """update user avatar"""
+        # get the post data
+        post_data = request.json
+        # get auth token
+        auth_token = request.headers.get('Authorization')
+        user = get_a_user_by_auth_token(auth_token)
 
+        if user:
+            return update_user_avatar(id=user.id, avatar=post_data['avatar'])
 

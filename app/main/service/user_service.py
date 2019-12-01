@@ -3,6 +3,8 @@ import datetime
 
 from app.main import db
 from app.main.model.user import User
+from app.main import qiniu_store
+from app.main.service.util import save_changes
 
 
 def save_new_user(data):
@@ -25,12 +27,30 @@ def save_new_user(data):
         return response_object, 409
 
 
+def update_user_avatar(id, avatar):
+    user = User.query.filter_by(id=id).first()
+    if user:
+        user.avatar = avatar
+        db.session.commit()
+        response_object = {
+            'status': 'success',
+            'message': 'User avatar update success',
+        }
+        return response_object, 200
+    else:
+        response_object = {
+            'status': 'fail',
+            'message': 'User is not exit',
+        }
+        return response_object, 404
+
 def get_all_users():
     return User.query.all()
 
 
 def get_a_user(id):
-    return User.query.filter_by(id=id).first()
+    user = User.query.filter_by(id=id).first()
+    return user
 
 def get_a_user_by_auth_token(auth_token):
     resp = User.decode_auth_token(auth_token)
@@ -54,8 +74,4 @@ def generate_token(user):
         }
         return response_object, 401
 
-
-def save_changes(data):
-    db.session.add(data)
-    db.session.commit()
 
