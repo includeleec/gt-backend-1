@@ -15,6 +15,7 @@ get_all_users =user_service.get_all_users
 get_a_user =user_service.get_a_user
 get_a_user_by_auth_token =user_service.get_a_user_by_auth_token
 update_user_avatar = user_service.update_user_avatar
+update_user_info= user_service.update_user_info
 
 @api.route('/')
 class UserList(Resource):
@@ -67,3 +68,24 @@ class UserAvatar(Resource):
         if user:
             return update_user_avatar(id=user.id, avatar=post_data['avatar'])
 
+@api.route('/info')
+@api.response(404, 'User not found.')
+class UserAvatar(Resource):
+    @api.doc('update user info')
+    @token_required
+    def post(self):
+        """update user info"""
+        # get the post data
+        post_data = request.json
+        # get auth token
+        auth_token = request.headers.get('Authorization')
+        user = get_a_user_by_auth_token(auth_token)
+
+        if user:
+            return update_user_info(user, post_data)
+        else:
+            response_object = {
+                'status': 'fail',
+                'message': 'User is not exit',
+            }
+            return response_object, 404

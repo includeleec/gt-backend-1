@@ -21,6 +21,9 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True)
     nickname = db.Column(db.String(50), unique=True)
     password_hash = db.Column(db.String(100))
+    sign = db.Column(db.String(255))
+    eth_wallet = db.Column(db.String(255))
+    hbp_wallet = db.Column(db.String(255))
 
     # 注意，backref 不能跟 talename 重名
     proposals_created = db.relationship('Proposal',

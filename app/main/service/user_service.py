@@ -26,6 +26,30 @@ def save_new_user(data):
         }
         return response_object, 409
 
+def update_user_info(user, data):
+    if(data['avatar']):
+        user.avatar = data['avatar']
+
+    if(data['nickname']):
+        user.nickname = data['nickname']
+
+    if(data['sign']):
+        user.sign = data['sign']
+
+    if(data['eth_wallet']):
+        user.eth_wallet = data['eth_wallet']
+
+    if(data['hbp_wallet']):
+        user.hbp_wallet = data['hbp_wallet']
+    # save to db
+    db.session.commit()
+    response_object = {
+        'status': 'success',
+        'message': 'User info update success',
+    }
+    return response_object, 200
+
+
 
 def update_user_avatar(id, avatar):
     user = User.query.filter_by(id=id).first()

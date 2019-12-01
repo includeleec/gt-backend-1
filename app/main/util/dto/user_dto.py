@@ -18,6 +18,9 @@ user_get = api.model('user', {
     'avatar': fields.String(description='user avatar'),
     'public_id': fields.String(description='user public Identifier'),
     'id': fields.String(description='user Identifier'),
+    'sign': fields.String(description='user sign'),
+    'eth_wallet': fields.String(description='user eth wallet'),
+    'hbp_wallet': fields.String(description='user hbp wallet'),
     'proposals_created': proposals_created_fields
 })
 
