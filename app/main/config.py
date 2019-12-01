@@ -1,12 +1,22 @@
 import os
+from dotenv import load_dotenv
 
+basedir = os.path.abspath(os.path.dirname(__file__)) # app/main
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
+APP_ROOT = os.path.join(os.path.dirname(__file__), '..')   # refers to application_top
+dotenv_path = os.path.join(APP_ROOT, '.env')
+load_dotenv(dotenv_path)
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'gotkengogogo')
     DEBUG = False
+
+    # qiniu
+    QINIU_ACCESS_KEY = os.getenv('QINIU_ACCESS_KEY')
+    QINIU_SECRET_KEY = os.getenv('QINIU_SECRET_KEY')
+    QINIU_BUCKET_NAME = os.getenv('QINIU_BUCKET_NAME')
+    QINIU_BUCKET_DOMAIN = os.getenv('QINIU_BUCKET_DOMAIN')
+
 
 
 class DevelopmentConfig(Config):
