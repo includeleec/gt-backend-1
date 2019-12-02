@@ -12,8 +12,11 @@ class ProposalZone(BaseModelMixin, TimestampMixin, db.Model):
 
     name = db.Column(db.String(100), unique=True)
     title = db.Column(db.String(100))
+    token = db.Column(db.String(100), unique=True) # token name
     summary = db.Column(db.String(200))
     vote_rule = db.Column(db.Text)
+    cover = db.Column(db.String(100)) # proposal cover image filename
+    theme_style = db.Column(db.Text) # proposal theme style css: {'background':'#ccc', 'color':'#fff'}
     vote_addr_weight_json = db.Column(db.Text)
     proposals = db.relationship('Proposal',
                                         foreign_keys='Proposal.zone_id',
@@ -31,6 +34,7 @@ class Proposal(BaseModelMixin, TimestampMixin, db.Model):
     __tablename__ = 'proposal'
 
     zone_id = db.Column(db.Integer, db.ForeignKey('proposal_zone.id'))
+    zone_proposal_id = db.Column(db.Integer) # 该 proposal 在某专区内的 ID, 以在该专区内的 ID 为自增
     title = db.Column(db.String(200))
     tag = db.Column(db.String(200))
     amount = db.Column(db.DECIMAL)

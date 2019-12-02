@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__)) # app/main
 
-APP_ROOT = os.path.join(os.path.dirname(__file__), '..')   # refers to application_top
+APP_ROOT = os.path.join(os.path.dirname(__file__), '../..')   # refers to application_top
 dotenv_path = os.path.join(APP_ROOT, '.env')
 load_dotenv(dotenv_path)
 

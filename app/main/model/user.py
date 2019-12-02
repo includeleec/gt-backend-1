@@ -3,6 +3,7 @@ from app.main.exts import db, flask_bcrypt
 import datetime
 from app.main.model.blacklist import BlacklistToken
 # from app.main.model import Proposal
+from app.main.model.mixin import BaseModelMixin, TimestampMixin
 from ..config import key
 import jwt
 
@@ -22,17 +23,21 @@ class User(db.Model):
     nickname = db.Column(db.String(50), unique=True)
     password_hash = db.Column(db.String(100))
     sign = db.Column(db.String(255))
-    eth_wallet = db.Column(db.String(255))
-    hbp_wallet = db.Column(db.String(255))
+
 
     # 注意，backref 不能跟 talename 重名
     proposals_created = db.relationship('Proposal',
                                     foreign_keys='Proposal.creator_id',
                                     backref='creator', lazy='dynamic')
-
+    # 该用户创造的 comment
     comment_created = db.relationship('Comment',
                                     foreign_keys='Comment.creator_id',
                                     backref='creator', lazy='dynamic')
+
+    # g该用户的 wallet
+    wallets = db.relationship('UserWallet',
+                                    foreign_keys='UserWallet.user_id',
+                                    backref='user', lazy='dynamic')
 
     @property
     def password(self):
@@ -86,3 +91,11 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User '{}'>".format(self.username)
+
+
+class UserWallet(TimestampMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    is_delete = db.Column(db.Boolean, nullable=False, default=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    token_zone_id = db.Column(db.Integer, db.ForeignKey('proposal_zone.id'), nullable=False) # 对应 proposal zone id
+    wallet_addr = db.Column(db.String(255), nullable=False) # wallet address
