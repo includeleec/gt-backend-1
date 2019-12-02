@@ -1,6 +1,5 @@
 from app.main.exts import db
 from sqlalchemy.ext.declarative import declared_attr
-from app.main.model import User
 from datetime import datetime
 
 

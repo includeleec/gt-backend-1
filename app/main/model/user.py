@@ -2,12 +2,9 @@
 from app.main.exts import db, flask_bcrypt
 import datetime
 from app.main.model.blacklist import BlacklistToken
-# from app.main.model import Proposal
-from app.main.model.mixin import BaseModelMixin, TimestampMixin
+from app.main.model.mixin import TimestampMixin
 from ..config import key
 import jwt
-
-
 
 class User(db.Model):
     """ User Model for storing user related details """
