@@ -14,6 +14,7 @@ class ProposalZone(BaseModelMixin, TimestampMixin, db.Model):
     title = db.Column(db.String(100))
     token = db.Column(db.String(100), unique=True) # token name
     summary = db.Column(db.String(200))
+    detail = db.Column(db.Text)
     vote_rule = db.Column(db.Text)
     cover = db.Column(db.String(100)) # proposal cover image filename
     theme_style = db.Column(db.Text) # proposal theme style css: {'background':'#ccc', 'color':'#fff'}
