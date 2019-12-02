@@ -2,18 +2,23 @@ from flask import request
 from flask_restplus import Resource
 
 from app.main.util.decorator import admin_token_required, token_required
-from app.main.service.proposal_service import save_new_proposal_zone, get_all_proposal_zone, save_new_proposal, get_all_proposal, get_a_proposal, get_a_proposal_zone, get_all_currency
+from app.main.service import proposal_service
 from app.main.service.comment_service import get_proposal_comments
+from app.main.service.user_service import get_a_user_by_auth_token
 
 import app.main.util.dto.proposal_dto as proposal_dto
 import app.main.util.dto.proposal_zone_dto as proposal_zone_dto
 import app.main.util.dto.currency_dto as currency_dto
 from app.main.util.dto import comment_dto
 
-
-
-
-from ..service.user_service import get_a_user_by_auth_token
+# rename proposal_service function
+save_new_proposal_zone = proposal_service.save_new_proposal_zone
+get_all_proposal_zone = proposal_service.get_all_proposal_zone
+save_new_proposal = proposal_service.save_new_proposal
+get_all_proposal= proposal_service.get_all_proposal
+get_a_proposal = proposal_service.get_a_proposal
+get_a_proposal_zone = proposal_service.get_a_proposal_zone,
+get_all_currency = proposal_service.get_all_currency
 
 # proposal zone dto
 api_proposal_zone = proposal_zone_dto.api
@@ -27,7 +32,7 @@ class ProposalZoneAPI(Resource):
     """
     @api_proposal_zone.doc('create new proposal zone')
     @api_proposal_zone.expect(proposal_zone, validate=False)
-    @token_required
+    @admin_token_required
     def post(self):
         # get the post data
         post_data = request.json

@@ -21,8 +21,12 @@ def save_new_proposal_zone(data):
     if not proposal_zone:
         new_proposal_zone = ProposalZone(
             name=data['name'],
+            token=data['token'],
             title=data['title'],
             summary=data['summary'],
+            detail=data['detail'],
+            theme_style=data['theme_style'],
+            cover=data['cover'],
             vote_rule=data['vote_rule'],
             vote_addr_weight_json=data['vote_addr_weight_json'],
             creator_id=data['creator_id'],
