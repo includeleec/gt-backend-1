@@ -17,7 +17,7 @@ get_all_proposal_zone = proposal_service.get_all_proposal_zone
 save_new_proposal = proposal_service.save_new_proposal
 get_all_proposal= proposal_service.get_all_proposal
 get_a_proposal = proposal_service.get_a_proposal
-get_a_proposal_zone = proposal_service.get_a_proposal_zone,
+get_a_proposal_zone = proposal_service.get_a_proposal_zone
 get_all_currency = proposal_service.get_all_currency
 
 # proposal zone dto
@@ -48,6 +48,24 @@ class ProposalZoneAPI(Resource):
     @api_proposal_zone.marshal_list_with(proposal_zone, envelope='data')
     def get(self):
         return get_all_proposal_zone()
+
+@api_proposal_zone.route('/<id>')
+@api_proposal_zone.param('id', 'Proposal  zone id')
+@api_proposal_zone.response(404, 'Proposal zone not found.')
+class ProposalZoneSingleAPI(Resource):
+    """
+        Proposal Zone Single Resource
+    """
+    @api_proposal_zone.doc('get a proposal zone')
+    @api_proposal_zone.marshal_with(proposal_zone, envelope='data')
+    def get(self, id):
+        """get a proposal zone given its id"""
+        proposal_zone = get_a_proposal_zone(id)
+        if not proposal_zone:
+            # print('404')
+            api_proposal_zone.abort(404)
+        else:
+            return proposal_zone
 
 
 # proposal dto
