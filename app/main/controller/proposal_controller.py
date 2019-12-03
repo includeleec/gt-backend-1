@@ -80,7 +80,7 @@ class ProposalAPI(Resource):
         Proposal Resource
     """
     @api_proposal.doc('create new proposal')
-    @api_proposal.expect(proposal_post, validate=True)
+    @api_proposal.expect(proposal_post)
     @token_required
     def post(self):
         # get the post data

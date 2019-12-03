@@ -1,7 +1,7 @@
 import uuid
 from app.main import db
 from app.main.model import User, ProposalZone, Proposal, Currency
-
+from app.main.service.util import save_changes
 
 # def detect_user_exist(func):
 #     def wrapper(data):
@@ -13,6 +13,25 @@ from app.main.model import User, ProposalZone, Proposal, Currency
 #             }
 #             return response_object, 404
 #     return wrapper
+
+
+def get_all_proposal_zone():
+    return ProposalZone.query.all()
+
+def get_all_proposal():
+    return Proposal.query.all()
+
+def get_all_proposal_in_zone(zone_id):
+    return Proposal.query.filter_by(zone_id=zone_id).all()
+
+def get_a_proposal_zone(id):
+    return ProposalZone.query.filter_by(id=id).first()
+
+def get_a_proposal(id):
+    return Proposal.query.filter_by(id=id).first()
+
+def get_all_currency():
+    return Currency.query.all()
 
 # @detect_user_exist
 def save_new_proposal_zone(data):
@@ -56,11 +75,20 @@ def save_new_proposal(data):
         return response_object, 404
 
     try:
+
+        # 当前 zone 内的 proposal 数量
+        zone_proposal_count = len(get_all_proposal_in_zone(data['zone_id']))
+
+        # 新的 proposal zone id
+        new_zone_proposal_id = zone_proposal_count + 1
+
         new_proposal = Proposal(
             zone_id=data['zone_id'],
+            zone_proposal_id=new_zone_proposal_id,
             title=data['title'],
             amount=data['amount'],
             summary=data['summary'],
+            status=100, # 创建成功，新创建的提案都是这个状态
             detail=data['detail'],
             creator_id=data['creator_id'],
             currency_id=data['currency_id'],
@@ -81,22 +109,3 @@ def save_new_proposal(data):
         }
         return response_object, 401
 
-
-def get_all_proposal_zone():
-    return ProposalZone.query.all()
-
-def get_all_proposal():
-    return Proposal.query.all()
-
-def get_a_proposal_zone(id):
-    return ProposalZone.query.filter_by(id=id).first()
-
-def get_a_proposal(id):
-    return Proposal.query.filter_by(id=id).first()
-
-def save_changes(data):
-    db.session.add(data)
-    db.session.commit()
-
-def get_all_currency():
-    return Currency.query.all()

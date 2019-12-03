@@ -36,6 +36,7 @@ creator_fields = fields.Nested(user_get)
 
 proposal = api.model('proposal', {
     'id': fields.String(description='proposal id'),
+    'zone_proposal_id': fields.String(description='proposal id in zone'),
     'title': fields.String(required=True, description='proposal title'),
     'summary': fields.String(description='summary'),
     'detail': fields.String(description='detail'),
