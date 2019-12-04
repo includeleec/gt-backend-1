@@ -15,19 +15,20 @@ proposals_created_fields = fields.List(fields.Nested(proposal_dto.proposal_creat
 user_get = api.model('user', {
     'email': fields.String(required=True, description='user email address'),
     'username': fields.String(required=True, description='user username'),
+    'nickname': fields.String(required=True, description='user nickname'),
     'avatar': fields.String(description='user avatar'),
     'public_id': fields.String(description='user public Identifier'),
     'id': fields.String(description='user Identifier'),
     'sign': fields.String(description='user sign'),
-    'eth_wallet': fields.String(description='user eth wallet'),
-    'hbp_wallet': fields.String(description='user hbp wallet'),
     'proposals_created': proposals_created_fields
 })
 
 user_get_all = api.model('user', {
     'email': fields.String(required=True, description='user email address'),
     'username': fields.String(required=True, description='user username'),
+    'nickname': fields.String(required=True, description='user nickname'),
     'avatar': fields.String(description='user avatar'),
+    'sign': fields.String(description='user sign'),
     'public_id': fields.String(description='user public Identifier'),
     'id': fields.String(description='user Identifier'),
 })

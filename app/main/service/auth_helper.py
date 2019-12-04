@@ -69,6 +69,7 @@ class Auth:
                         'id': user.id,
                         'username': user.username,
                         'nickname': user.nickname,
+                        'sign': user.sign,
                         'avatar': user.avatar,
                         'email': user.email,
                         'admin': user.admin,
