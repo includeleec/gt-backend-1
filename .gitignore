@@ -107,6 +107,6 @@ ENV/
 .qiniu_pythonsdk_hostscache.json
 up_tmp/
 
-/.vscode
+.vscode/
 seed.sql
 testdb.sql
