@@ -106,3 +106,7 @@ ENV/
 #qiniu
 .qiniu_pythonsdk_hostscache.json
 up_tmp/
+
+/.vscode
+seed.sql
+testdb.sql
