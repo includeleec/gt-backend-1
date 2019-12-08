@@ -63,7 +63,43 @@ def save_new_proposal_zone(data):
         }
         return response_object, 409
 
-# @detect_user_exist
+# update proposal zone
+def update_proposal_zone(id, data, user):
+    proposal_zone = ProposalZone.query.filter_by(id=id).first()
+    if not proposal_zone:
+        response_object = {
+            'status': 'fail',
+            'message': 'Proposal zone id is not exists.',
+        }
+        return response_object, 404
+    else:
+        try:
+            proposal_zone.name = data['name']
+            proposal_zone.title = data['title']
+            proposal_zone.token = data['token']
+            proposal_zone.summary = data['summary']
+            proposal_zone.detail = data['detail']
+            proposal_zone.cover = data['cover']
+            proposal_zone.theme_style = data['theme_style']
+            proposal_zone.vote_rule = data['vote_rule']
+            proposal_zone.vote_addr_weight_json = data['vote_addr_weight_json']
+
+            # write to db
+            db.session.commit()
+
+            response_object = {
+                'status': 'success',
+                'message': 'Successfully update a proposal zone.',
+            }
+            return response_object, 200
+        except Exception as e:
+            print(e)
+            response_object = {
+                'status': 'fail',
+                'message': str(e)
+            }
+            return response_object, 401
+
 def save_new_proposal(data):
 
     proposal_zone = ProposalZone.query.filter_by(id=data['zone_id']).first()
@@ -101,6 +137,46 @@ def save_new_proposal(data):
             'message': 'Successfully create a new proposal.',
         }
         return response_object, 201
+    except Exception as e:
+        print(e)
+        response_object = {
+            'status': 'fail',
+            'message': str(e)
+        }
+        return response_object, 401
+
+# only creator, admin can udpate
+def update_proposal(id, data, user):
+
+    proposal = Proposal.query.filter_by(id=id).first()
+    if not proposal:
+        response_object = {
+            'status': 'fail',
+            'message': 'proposal is not exists.',
+        }
+        return response_object, 404
+    if(proposal.creator_id != user.id and user.admin != True):
+        response_object = {
+            'status': 'fail',
+            'message': 'permission deny',
+        }
+        return response_object, 403
+
+    try:
+        proposal.title = data['title']
+        proposal.amount = data['amount']
+        proposal.summary = data['summary']
+        proposal.detail = data['detail']
+        proposal.currency_id = data['currency_id']
+        proposal.tag = data['tag']
+
+        db.session.commit()
+
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully update proposal.',
+        }
+        return response_object, 200
     except Exception as e:
         print(e)
         response_object = {

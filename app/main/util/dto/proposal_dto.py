@@ -59,4 +59,13 @@ proposal_post = api.model('proposal', {
     'detail': fields.String(description='detail'),
     'amount': fields.String(description='proposal amount'),
     'status': fields.String(description='proposal status'),
+    'tag': fields.String(description='proposal tag'),
+})
+
+proposal_put = api.model('proposal', {
+    'title': fields.String(required=True, description='proposal title'),
+    'summary': fields.String(description='summary'),
+    'detail': fields.String(description='detail'),
+    'amount': fields.String(description='proposal amount'),
+    'tag': fields.String(description='proposal tag'),
 })

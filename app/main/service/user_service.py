@@ -8,7 +8,7 @@ from app.main.service.util import save_changes
 
 
 def save_new_user(data):
-    user = User.query.filter_by(email=data['email']).first()
+    user = User.query.filter((User.email==data['email']) | (User.username==data['username'])).first()
     if not user:
         new_user = User(
             public_id=str(uuid.uuid4()),
@@ -22,7 +22,7 @@ def save_new_user(data):
     else:
         response_object = {
             'status': 'fail',
-            'message': 'User already exists. Please Log in.',
+            'message': 'User email or username already exists. Please Log in.',
         }
         return response_object, 409
 
