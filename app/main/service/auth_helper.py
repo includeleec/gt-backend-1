@@ -1,6 +1,6 @@
 from app.main.model.user import User
 from ..service.blacklist_service import save_token
-
+from ..service.util.uuid import version_uuid
 
 class Auth:
 
@@ -10,7 +10,7 @@ class Auth:
             # fetch the user data
             user = User.query.filter_by(email=data.get('email')).first()
             if user and user.check_password(data.get('password')):
-                auth_token = User.encode_auth_token(user.id)
+                auth_token = User.encode_auth_token(user.public_id)
                 if auth_token:
                     response_object = {
                         'status': 'success',
@@ -39,7 +39,7 @@ class Auth:
         auth_token = new_request.headers.get('Authorization')
         if auth_token:
             resp = User.decode_auth_token(auth_token)
-            if not isinstance(resp, str):
+            if version_uuid(resp):
                 # mark the token as blacklisted
                 return save_token(token=auth_token)
             else:
@@ -60,28 +60,36 @@ class Auth:
         # get the auth token
         auth_token = new_request.headers.get('Authorization')
         if auth_token:
-            resp = User.decode_auth_token(auth_token)
-            if not isinstance(resp, str):
-                user = User.query.filter_by(id=resp).first()
-                response_object = {
-                    'status': 'success',
-                    'data': {
-                        'id': user.id,
-                        'username': user.username,
-                        'nickname': user.nickname,
-                        'sign': user.sign,
-                        'avatar': user.avatar,
-                        'email': user.email,
-                        'admin': user.admin,
-                        'registered_on': str(user.registered_on)
+            try:
+                resp = User.decode_auth_token(auth_token)
+                if version_uuid(resp):
+                    user = User.query.filter_by(public_id=resp).first()
+                    response_object = {
+                        'status': 'success',
+                        'data': {
+                            'id': user.id,
+                            'username': user.username,
+                            'nickname': user.nickname,
+                            'sign': user.sign,
+                            'avatar': user.avatar,
+                            'email': user.email,
+                            'admin': user.admin,
+                            'registered_on': str(user.registered_on)
+                        }
                     }
+                    return response_object, 200
+                else:
+                    response_object = {
+                        'status': 'fail',
+                        'message': resp
+                    }
+                    return response_object, 401
+            except Exception as e:
+                response_object = {
+                    'status': 'fail',
+                    'message': str(e)
                 }
-                return response_object, 200
-            response_object = {
-                'status': 'fail',
-                'message': resp
-            }
-            return response_object, 401
+                return response_object, 500
         else:
             response_object = {
                 'status': 'fail',

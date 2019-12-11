@@ -5,6 +5,7 @@ from app.main import db
 from app.main.model.user import User
 from app.main import qiniu_store
 from app.main.service.util import save_changes
+from app.main.service.util.uuid import version_uuid
 
 
 def save_new_user(data):
@@ -73,13 +74,13 @@ def get_a_user(id):
 
 def get_a_user_by_auth_token(auth_token):
     resp = User.decode_auth_token(auth_token)
-    if not isinstance(resp, str):
-        return User.query.filter_by(id=resp).first()
+    if version_uuid(resp):
+        return User.query.filter_by(public_id=resp).first()
 
 def generate_token(user):
     try:
         # generate the auth token
-        auth_token = User.encode_auth_token(user.id)
+        auth_token = User.encode_auth_token(user.public_id)
         response_object = {
             'status': 'success',
             'message': 'Successfully registered.',
