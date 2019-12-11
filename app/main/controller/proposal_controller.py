@@ -23,6 +23,7 @@ get_a_proposal_zone = proposal_service.get_a_proposal_zone
 get_all_currency = proposal_service.get_all_currency
 update_proposal = proposal_service.update_proposal
 update_proposal_zone = proposal_service.update_proposal_zone
+delete_proposal=proposal_service.delete_proposal
 
 # proposal zone dto
 api_proposal_zone = proposal_zone_dto.api
@@ -151,6 +152,15 @@ class ProposalSingleAPI(Resource):
 
         if user:
             return update_proposal(id=id, data=post_data, user=user)
+
+    @api_proposal.doc('delete proposal')
+    @admin_token_required
+    def delete(self, id):
+        auth_token = request.headers.get('Authorization')
+        user = get_a_user_by_auth_token(auth_token)
+
+        if user:
+            return delete_proposal(id=id, user=user)
 
 # proposal comment api
 

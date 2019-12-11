@@ -16,10 +16,10 @@ from app.main.service.util import save_changes
 
 
 def get_all_proposal_zone():
-    return ProposalZone.query.all()
+    return ProposalZone.query.filter_by(is_delete=0).all()
 
 def get_all_proposal():
-    return Proposal.query.all()
+    return Proposal.query.filter_by(is_delete=0).all()
 
 def get_all_proposal_in_zone(zone_id):
     return Proposal.query.filter_by(zone_id=zone_id).all()
@@ -38,24 +38,31 @@ def save_new_proposal_zone(data):
 
     proposal_zone = ProposalZone.query.filter_by(name=data['name']).first()
     if not proposal_zone:
-        new_proposal_zone = ProposalZone(
-            name=data['name'],
-            token=data['token'],
-            title=data['title'],
-            summary=data['summary'],
-            detail=data['detail'],
-            theme_style=data['theme_style'],
-            cover=data['cover'],
-            vote_rule=data['vote_rule'],
-            vote_addr_weight_json=data['vote_addr_weight_json'],
-            creator_id=data['creator_id'],
-        )
-        save_changes(new_proposal_zone)
-        response_object = {
-            'status': 'success',
-            'message': 'Successfully create a new proposal zone.',
-        }
-        return response_object, 201
+        try:
+            new_proposal_zone = ProposalZone(
+                name=data['name'],
+                token=data['token'],
+                title=data['title'],
+                summary=data['summary'],
+                detail=data['detail'],
+                theme_style=data['theme_style'],
+                cover=data['cover'],
+                vote_rule=data['vote_rule'],
+                vote_addr_weight_json=data['vote_addr_weight_json'],
+                creator_id=data['creator_id'],
+            )
+            save_changes(new_proposal_zone)
+            response_object = {
+                'status': 'success',
+                'message': 'Successfully create a new proposal zone.',
+            }
+            return response_object, 201
+        except Exception as e:
+            response_object = {
+                'status': 'fail',
+                'message': str(e)
+            }
+            return response_object, 400
     else:
         response_object = {
             'status': 'fail',
@@ -185,3 +192,33 @@ def update_proposal(id, data, user):
         }
         return response_object, 401
 
+def delete_proposal(id, user):
+    proposal = Proposal.query.filter_by(id=id).first()
+    if not proposal:
+        response_object = {
+            'status': 'fail',
+            'message': 'proposal is not exists.',
+        }
+        return response_object, 404
+    if(proposal.creator_id != user.id and user.admin != True):
+        response_object = {
+            'status': 'fail',
+            'message': 'permission deny',
+        }
+        return response_object, 403
+
+    try:
+        proposal.is_delete = 1
+        db.session.commit()
+
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully delete proposal.',
+        }
+        return response_object, 200
+    except Exception as e:
+        response_object = {
+            'status': 'fail',
+            'message': str(e)
+        }
+        return response_object, 401
