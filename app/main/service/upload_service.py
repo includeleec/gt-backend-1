@@ -30,6 +30,14 @@ def get_image(key):
             "data": qiniu_store.url(key)
         } 
 
+def get_config():
+    return {
+        "status":"success",
+        "data": {
+            'qiniu_bucket_domain': qiniu_store.url('')
+        }
+    }
+
 def delete_image(key):
     ret, info = qiniu_store.delete(key)
     if(info.status_code == 200):

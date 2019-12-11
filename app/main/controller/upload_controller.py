@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 import os
 
 from app.main.util.decorator import admin_token_required, token_required
-from app.main.service.upload_service import save_new_image, delete_image, get_image
+from app.main.service.upload_service import save_new_image, delete_image, get_image, get_config
 from app.main.util.dto import upload_dto
 from app.main.config import basedir
 
@@ -47,7 +47,7 @@ class File(Resource):
 
     @api.doc('get upload file url')
     def get(self, key):
-        '''Delete file'''
+        '''get file url'''
         return get_image(key), 200
 
 
@@ -55,3 +55,14 @@ class File(Resource):
     def delete(self, key):
         '''Delete file'''
         return delete_image(key), 200
+
+@api.route('/config/')
+class Config(Resource):
+    """
+        Upload Config Resource
+    """
+
+    @api.doc('get upload config')
+    def get(self):
+        '''get upload config'''
+        return get_config(), 200
