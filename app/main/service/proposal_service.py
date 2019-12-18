@@ -222,3 +222,37 @@ def delete_proposal(id, user):
             'message': str(e)
         }
         return response_object, 401
+
+def delete_proposal_zone(id, user):
+    proposal_zone = ProposalZone.query.filter_by(id=id).first()
+    if not proposal_zone:
+        response_object = {
+            'status': 'fail',
+            'message': 'proposal zone id is not exists.',
+        }
+        return response_object, 404
+    if(user.admin != True):
+        response_object = {
+            'status': 'fail',
+            'message': 'permission deny',
+        }
+        return response_object, 403
+
+    try:
+        proposal_zone.is_delete = 1
+        # 该专区下所有 proposal 都被删除
+        db.session.query(Proposal).filter(Proposal.zone_id==id).update({Proposal.is_delete:1})
+
+        db.session.commit()
+
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully delete proposal zone and it`s proposal.',
+        }
+        return response_object, 200
+    except Exception as e:
+        response_object = {
+            'status': 'fail',
+            'message': str(e)
+        }
+        return response_object, 401
