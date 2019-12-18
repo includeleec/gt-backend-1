@@ -3,6 +3,7 @@ import datetime
 
 from app.main import db
 from app.main.model.user import User
+from app.main.model.proposal import Proposal
 from app.main import qiniu_store
 from app.main.service.util import save_changes
 from app.main.service.util.uuid import version_uuid
@@ -69,8 +70,22 @@ def get_all_users():
 
 
 def get_a_user(id):
-    user = User.query.filter_by(id=id).first()
+    user = User.query.filter(User.id==id).first()
+    created = Proposal.query.filter_by(creator_id=id, is_delete=0).all()
+    user.proposals_created = created
     return user
+
+# 还未使用
+def get_a_user_proposal(id):
+    created = Proposal.query.filter_by(creator_id=id, is_delete=0).all()
+
+    response_object = {
+            'status': 'success',
+            'data': {
+                'created':created,
+            }
+        }
+    return response_object, 200
 
 def get_a_user_by_auth_token(auth_token):
     resp = User.decode_auth_token(auth_token)

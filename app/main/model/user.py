@@ -31,7 +31,7 @@ class User(db.Model):
                                     foreign_keys='Comment.creator_id',
                                     backref='creator', lazy='dynamic')
 
-    # g该用户的 wallet
+    # 该用户的 wallet
     wallets = db.relationship('UserWallet',
                                     foreign_keys='UserWallet.user_id',
                                     backref='user', lazy='dynamic')
