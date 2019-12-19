@@ -21,6 +21,8 @@ class User(db.Model):
     password_hash = db.Column(db.String(100))
     sign = db.Column(db.String(255))
 
+    confirmed = db.Column(db.Boolean, default=False)
+
 
     # 注意，backref 不能跟 talename 重名
     proposals_created = db.relationship('Proposal',
@@ -42,6 +44,9 @@ class User(db.Model):
 
     @password.setter
     def password(self, password):
+        self.password_hash = flask_bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def set_password(self, password):
         self.password_hash = flask_bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):

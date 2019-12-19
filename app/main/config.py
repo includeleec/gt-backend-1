@@ -16,6 +16,7 @@ class Config:
     QINIU_SECRET_KEY = os.getenv('QINIU_SECRET_KEY')
     QINIU_BUCKET_NAME = os.getenv('QINIU_BUCKET_NAME')
     QINIU_BUCKET_DOMAIN = os.getenv('QINIU_BUCKET_DOMAIN')
+    GT_DOMAIN = os.getenv('GT_DOMAIN', 'https://gotoken.io')
 
 
 
@@ -42,6 +43,7 @@ class ProductionConfig(Config):
     # uncomment the line below to use postgres
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    HOST = 'https://gotoken.io'
 
 
 config_by_name = dict(

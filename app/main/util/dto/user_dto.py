@@ -20,7 +20,8 @@ user_get = api.model('user', {
     'public_id': fields.String(description='user public Identifier'),
     'id': fields.String(description='user Identifier'),
     'sign': fields.String(description='user sign'),
-    'proposals_created': proposals_created_fields
+    'confirmed':fields.Boolean(description='email confirm status'),
+    'proposals_created': proposals_created_fields,
 })
 
 user_get_all = api.model('user', {
@@ -30,7 +31,16 @@ user_get_all = api.model('user', {
     'avatar': fields.String(description='user avatar'),
     'sign': fields.String(description='user sign'),
     'public_id': fields.String(description='user public Identifier'),
+    'confirmed':fields.Boolean(description='email confirm status'),
     'id': fields.String(description='user Identifier'),
 })
 
+forget_password = api.model('user', {
+    'email': fields.String(required=True, description='user email address'),
+})
 
+reset_password = api.model('user', {
+    'token': fields.String(required=True, description='the token from reset pwd email'),
+    'email': fields.String(required=True, description='user email address'),
+    'password': fields.String(required=True, description='user password'),
+})

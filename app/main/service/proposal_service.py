@@ -22,7 +22,7 @@ def get_all_proposal():
     return Proposal.query.filter_by(is_delete=0).all()
 
 def get_all_proposal_in_zone(zone_id):
-    return Proposal.query.filter_by(zone_id=zone_id).all()
+    return Proposal.query.filter_by(zone_id=zone_id, is_delete=0).all()
 
 def get_a_proposal_zone(id):
     return ProposalZone.query.filter_by(id=id).first()

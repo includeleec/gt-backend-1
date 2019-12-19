@@ -38,4 +38,3 @@ class LogoutAPI(Resource):
     def post(self):
         
         return Auth.logout_user(request)
-
