@@ -60,7 +60,8 @@ def update_user_avatar(id, avatar, old_avatar):
             'message': 'User avatar update success',
         }
         # delete old avatar in s3
-        delete_image(old_avatar)
+        if old_avatar:
+            delete_image(old_avatar)
 
         return response_object, 200
     else:
