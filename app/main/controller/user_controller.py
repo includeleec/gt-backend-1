@@ -71,7 +71,8 @@ class UserAvatar(Resource):
         user = get_a_user_by_auth_token(auth_token)
 
         if user:
-            return update_user_avatar(id=user.id, avatar=post_data['avatar'])
+            
+            return update_user_avatar(id=user.id, avatar=post_data['avatar'], old_avatar=post_data['old_avatar'])
 
 @api.route('/info')
 @api.response(404, 'User not found.')

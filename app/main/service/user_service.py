@@ -4,8 +4,8 @@ import datetime
 from app.main import db
 from app.main.model.user import User
 from app.main.model.proposal import Proposal
-from app.main import qiniu_store
 from app.main.service.util import save_changes
+from app.main.service.upload_service import delete_image
 from app.main.service.util.uuid import version_uuid
 from app.main.util.token import generate_email_token, validate_token
 from app.main.settings import Operations
@@ -50,7 +50,7 @@ def update_user_info(user, data):
 
 
 
-def update_user_avatar(id, avatar):
+def update_user_avatar(id, avatar, old_avatar):
     user = User.query.filter_by(id=id).first()
     if user:
         user.avatar = avatar
@@ -59,6 +59,9 @@ def update_user_avatar(id, avatar):
             'status': 'success',
             'message': 'User avatar update success',
         }
+        # delete old avatar in s3
+        delete_image(old_avatar)
+
         return response_object, 200
     else:
         response_object = {

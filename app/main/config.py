@@ -11,11 +11,19 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'gotkengogogo')
     DEBUG = False
 
-    # qiniu
-    QINIU_ACCESS_KEY = os.getenv('QINIU_ACCESS_KEY')
-    QINIU_SECRET_KEY = os.getenv('QINIU_SECRET_KEY')
-    QINIU_BUCKET_NAME = os.getenv('QINIU_BUCKET_NAME')
-    QINIU_BUCKET_DOMAIN = os.getenv('QINIU_BUCKET_DOMAIN')
+    # qiniu config
+    # QINIU_ACCESS_KEY = os.getenv('QINIU_ACCESS_KEY')
+    # QINIU_SECRET_KEY = os.getenv('QINIU_SECRET_KEY')
+    # QINIU_BUCKET_NAME = os.getenv('QINIU_BUCKET_NAME')
+    # QINIU_BUCKET_DOMAIN = os.getenv('QINIU_BUCKET_DOMAIN')
+
+    # s3 config
+    S3_BUCKET = os.getenv("S3_BUCKET")
+    S3_KEY = os.getenv("S3_KEY")
+    S3_SECRET = os.getenv("S3_SECRET_ACCESS_KEY")
+    S3_URL_PREFIX = os.getenv("S3_URL_PREFIX")
+
+    # GT config
     GT_DOMAIN = os.getenv('GT_DOMAIN', 'https://gotoken.io')
 
 
